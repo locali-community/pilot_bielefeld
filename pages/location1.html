@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOCALI — Location 1: Sparrenburg</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="fade-up">
+      <div class="logo">LOCΛLI<span>.</span></div>
+      <div class="phase-label">Phase 02 — The Social Handshake</div>
+    </header>
+
+    <div class="steps fade-up-2">
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+
+    <div class="card fade-up-2">
+      <div class="card-title">📍 You found Location 1</div>
+      <p>You're at <strong style="color:var(--white)">Sparrenburg Castle</strong>. Look around — somewhere nearby, another player just scanned the same QR code.</p>
+    </div>
+
+    <!-- Vibe Reveal -->
+    <div class="card fade-up-3" style="border-color:#333;background:linear-gradient(135deg,#111,#1a1a1a);">
+      <div class="card-title" style="color:var(--accent)">Today's Vibe ✦</div>
+      <p style="font-size:1rem;color:var(--white);line-height:1.9;font-style:italic;">
+        "Medieval stone meets modern stranger. The fortress kept secrets for centuries — yours only needs to survive until 18:00."
+      </p>
+    </div>
+
+    <div class="card fade-up-3">
+      <div class="card-title">How to Find Your Partner</div>
+      <ul>
+        <li>Go to the LOCALI Instagram post (link below).</li>
+        <li>Comment <span class="ig-tag">GREEN CARD</span> on the post.</li>
+        <li>Browse comments — find another "GREEN CARD" player.</li>
+        <li>Send them a DM: <em style="color:#ccc">"Hey, want to Sync-up for the Bielefeld Quest?"</em></li>
+        <li>Together, agree on a unique <strong style="color:var(--gold)">Secret Team Word</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="ig-box fade-up-4">
+      <p style="font-size:0.65rem;letter-spacing:0.2em;color:#555;margin-bottom:0.5rem;">INSTAGRAM POST</p>
+      <a class="ig-post-url" href="https://www.instagram.com/p/REPLACE_WITH_YOUR_POST_ID/" target="_blank">
+        instagram.com/p/REPLACE_WITH_YOUR_POST_ID/
+      </a>
+      <p style="color:#555;font-size:0.65rem;margin-top:0.5rem;">Open Instagram → find this post → comment GREEN CARD</p>
+    </div>
+
+    <div class="card fade-up-4" style="border-color:var(--gold)">
+      <div class="card-title">Create Your Secret Team Word</div>
+      <p style="margin-bottom:1rem;">Once you've connected with your partner via DM, choose a unique word together. This is your shared key for the rest of the quest.</p>
+      <p style="font-size:0.7rem;color:#555;">Examples: <span style="color:#888">Sparrenburg26 · Kaktus99 · SyncBielefeld</span></p>
+      <p style="font-size:0.7rem;color:var(--accent);margin-top:0.5rem;">⚠ If two teams pick the same word, the first to finish wins.</p>
+    </div>
+
+    <!-- Secret Word Entry -->
+    <div class="fade-up-5">
+      <p style="font-size:0.65rem;letter-spacing:0.25em;color:#666;margin-bottom:0.6rem;">ENTER YOUR SECRET TEAM WORD</p>
+      <input type="text" id="teamWordInput" placeholder="e.g. Sparrenburg26" autocomplete="off" spellcheck="false" />
+      <div id="wordError" class="alert alert-error hidden">Please enter a team word (min. 4 characters, no spaces).</div>
+      <button class="btn" onclick="saveWord()">Lock It In →</button>
+    </div>
+
+    <div class="clue-box fade-up-5" style="margin-top:1.5rem;">
+      <p>
+        From the fortress, follow the scent of spice and smoke downhill into the city. 
+        A cactus stands guard where two cultures meet over tacos. 
+        Ask inside — the next code waits.
+      </p>
+    </div>
+
+    <div class="footer">LOCALI 2.0 &nbsp;·&nbsp; SPARRENBURG &nbsp;·&nbsp; BIELEFELD</div>
+  </div>
+
+  <script src="../js/locali.js"></script>
+  <script>
+    function saveWord() {
+      const raw = document.getElementById('teamWordInput').value.trim();
+      const err = document.getElementById('wordError');
+
+      if (raw.length < 4 || /\s/.test(raw)) {
+        err.classList.remove('hidden');
+        return;
+      }
+      err.classList.add('hidden');
+
+      // Normalize: lowercase, alphanumeric only
+      const word = raw.toLowerCase().replace(/[^a-z0-9]/gi, '');
+      LOCALI.set(LOCALI.KEYS.TEAM_WORD, word);
+      LOCALI.set(LOCALI.KEYS.PHASE, '2');
+
+      // Redirect to location 2
+      window.location.href = 'location2.html';
+    }
+
+    document.getElementById('teamWordInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') saveWord();
+    });
+  </script>
+</body>
+</html>

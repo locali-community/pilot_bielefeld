@@ -1,0 +1,389 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+  --black: #0a0a0a;
+  --white: #f0ede6;
+  --accent: #ff3c00;
+  --gold: #f5c842;
+  --green: #00e676;
+  --dim: #1a1a1a;
+  --border: #2a2a2a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Space Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.6;
+}
+
+.page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER / LOGO ── */
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.5rem;
+  letter-spacing: 0.15em;
+  color: var(--white);
+  line-height: 1;
+}
+.logo span { color: var(--accent); }
+
+.phase-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 0.4rem;
+  margin-bottom: 2.5rem;
+}
+
+/* ── SECTION CARDS ── */
+.card {
+  background: var(--dim);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin-bottom: 0.75rem;
+}
+
+.card p, .card li {
+  font-size: 0.78rem;
+  line-height: 1.8;
+  color: #aaa;
+}
+
+.card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.card ul li::before {
+  content: '→ ';
+  color: var(--accent);
+}
+
+/* ── CLUE BOX ── */
+.clue-box {
+  border: 1px solid var(--accent);
+  background: rgba(255,60,0,0.06);
+  border-radius: 2px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+
+.clue-box::before {
+  content: 'CLUE';
+  position: absolute;
+  top: -0.6rem;
+  left: 1rem;
+  background: var(--black);
+  padding: 0 0.5rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.clue-box p {
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--white);
+  font-style: italic;
+}
+
+/* ── INPUTS & BUTTONS ── */
+input[type="text"], input[type="password"] {
+  width: 100%;
+  background: #111;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--white);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  padding: 0.85rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 0.75rem;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+  border-color: var(--accent);
+}
+
+input::placeholder { color: #444; }
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: var(--accent);
+  color: var(--white);
+  border: none;
+  border-radius: 2px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn:hover { background: #e03500; }
+.btn:active { transform: scale(0.98); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: #666;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.btn-ghost:hover { border-color: #555; color: #999; background: transparent; }
+
+.btn-green {
+  background: var(--green);
+  color: var(--black);
+}
+.btn-green:hover { background: #00c85d; }
+
+.btn-gold {
+  background: var(--gold);
+  color: var(--black);
+}
+.btn-gold:hover { background: #e0b430; }
+
+/* ── STATUS / ALERTS ── */
+.alert {
+  padding: 0.85rem 1rem;
+  border-radius: 2px;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+.alert-error { background: rgba(255,60,0,0.12); border: 1px solid rgba(255,60,0,0.4); color: #ff7a5a; }
+.alert-success { background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.35); color: var(--green); }
+.alert-info { background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.3); color: var(--gold); }
+
+/* ── VOUCHER ── */
+.voucher {
+  border: 2px dashed var(--gold);
+  border-radius: 4px;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+
+.voucher::before, .voucher::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: var(--black);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.voucher::before { left: -12px; }
+.voucher::after { right: -12px; }
+
+.voucher-amount {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  color: var(--gold);
+  line-height: 1;
+}
+.voucher-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+.voucher-merchant {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  margin-top: 0.5rem;
+}
+
+/* ── COUNTDOWN ── */
+.countdown {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.countdown-digits {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.5rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  line-height: 1;
+}
+.countdown-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  color: #555;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+
+/* ── PROGRESS STEPS ── */
+.steps {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.step-dot {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.4s;
+}
+.step-dot.active { background: var(--accent); }
+.step-dot.done { background: var(--green); }
+
+/* ── DIVIDER ── */
+.divider {
+  text-align: center;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  color: #333;
+  margin: 1.25rem 0;
+  position: relative;
+}
+.divider::before, .divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 35%;
+  height: 1px;
+  background: var(--border);
+}
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+.fade-up { animation: fadeUp 0.5s ease forwards; }
+.fade-up-2 { animation: fadeUp 0.5s 0.1s ease both; }
+.fade-up-3 { animation: fadeUp 0.5s 0.2s ease both; }
+.fade-up-4 { animation: fadeUp 0.5s 0.3s ease both; }
+.fade-up-5 { animation: fadeUp 0.5s 0.4s ease both; }
+
+.pulse { animation: pulse 2s infinite; }
+
+.winner-glow {
+  animation: fadeUp 0.6s ease forwards;
+  box-shadow: 0 0 40px rgba(245, 200, 66, 0.3);
+}
+
+/* ── INSTAGRAM MOCK ── */
+.ig-box {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
+}
+.ig-box .ig-post-url {
+  color: #3897f0;
+  word-break: break-all;
+  font-size: 0.7rem;
+}
+.ig-tag {
+  display: inline-block;
+  background: rgba(0,230,118,0.15);
+  border: 1px solid rgba(0,230,118,0.35);
+  color: var(--green);
+  padding: 0.2rem 0.6rem;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.15em;
+  margin: 0.25rem 0;
+}
+
+/* ── FOOTER ── */
+.footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: #333;
+}
+
+/* ── HIDDEN ── */
+.hidden { display: none !important; }
+
+/* ── REDEEMED STATE ── */
+.redeemed {
+  opacity: 0.5;
+  position: relative;
+}
+.redeemed::after {
+  content: 'REDEEMED';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  transform: rotate(-15deg);
+}

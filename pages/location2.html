@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOCALI — Location 2: Kaktus</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="fade-up">
+      <div class="logo">LOCΛLI<span>.</span></div>
+      <div class="phase-label">Phase 03 — The Merchant Hub</div>
+    </header>
+
+    <div class="steps fade-up-2">
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+    </div>
+
+    <!-- Gate check: must have team word -->
+    <div id="noWordWarning" class="alert alert-error hidden fade-up-2">
+      ⚠ You haven't set a Secret Team Word yet. 
+      <br><a href="location1.html" style="color:var(--accent)">→ Go back to Location 1</a>
+    </div>
+
+    <div id="mainContent" class="hidden">
+
+      <div class="card fade-up-2">
+        <div class="card-title">📍 You found Kaktus</div>
+        <p>Welcome to your partner restaurant. Your shared progress is verified here. Enter your Secret Team Word to unlock your first reward.</p>
+      </div>
+
+      <div class="fade-up-3">
+        <p style="font-size:0.65rem;letter-spacing:0.25em;color:#666;margin-bottom:0.6rem;">YOUR SECRET TEAM WORD</p>
+        <input type="text" id="wordInput" placeholder="Enter your team word…" autocomplete="off" spellcheck="false" />
+        <div id="wordError" class="alert alert-error hidden">❌ Wrong word. Check with your partner and try again.</div>
+        <button class="btn" onclick="validateWord()">Validate Team →</button>
+      </div>
+
+      <div id="voucherSection" class="hidden">
+        <div class="divider">✦ UNLOCKED ✦</div>
+
+        <div id="voucherCard" class="voucher fade-up winner-glow" style="display:none">
+          <div class="voucher-label">Exclusive LOCALI Reward</div>
+          <div class="voucher-amount">20%</div>
+          <div style="font-size:0.7rem;letter-spacing:0.2em;color:#888">OFF YOUR ENTIRE ORDER</div>
+          <div class="voucher-merchant">🌮 Kaktus Mexican Restaurant</div>
+          <div style="font-size:0.65rem;color:#555;margin-top:0.75rem;" id="voucherCode"></div>
+        </div>
+
+        <div class="alert alert-success fade-up-2" style="display:none" id="redeemInstructions">
+          Show this screen to your waiter and tap "Redeem" when they confirm.
+        </div>
+
+        <button id="redeemBtn" class="btn btn-green fade-up-3" onclick="redeemVoucher()" style="display:none">
+          ✓ Redeem Discount
+        </button>
+
+        <div id="redeemedMsg" class="alert alert-info hidden">
+          ✅ Voucher redeemed! Enjoy your meal. Your clue to the final location is below.
+        </div>
+
+        <!-- Clue to Location 3 -->
+        <div class="clue-box fade-up-4" id="finalClue" style="display:none">
+          <p>
+            After your meal, head to Bielefeld's beating heart — the marketplace where the city has gathered for centuries. 
+            At the corner where the old town hall faces the fountain, look low. 
+            The final QR waits. The clock is ticking.
+          </p>
+        </div>
+
+        <a href="location3.html" id="finalBtn" class="btn btn-gold fade-up-5" style="display:none">
+          Head to the Final Location →
+        </a>
+      </div>
+
+    </div><!-- end mainContent -->
+
+    <div class="footer">LOCALI 2.0 &nbsp;·&nbsp; KAKTUS RESTAURANT &nbsp;·&nbsp; BIELEFELD</div>
+  </div>
+
+  <script src="../js/locali.js"></script>
+  <script>
+    const storedWord = LOCALI.get(LOCALI.KEYS.TEAM_WORD);
+
+    if (!storedWord) {
+      document.getElementById('noWordWarning').classList.remove('hidden');
+    } else {
+      document.getElementById('mainContent').classList.remove('hidden');
+    }
+
+    function validateWord() {
+      const input = document.getElementById('wordInput').value.trim().toLowerCase().replace(/[^a-z0-9]/gi, '');
+      const err = document.getElementById('wordError');
+
+      if (input !== storedWord) {
+        err.classList.remove('hidden');
+        return;
+      }
+
+      err.classList.add('hidden');
+      LOCALI.set(LOCALI.KEYS.PHASE, '3');
+      showVoucher();
+    }
+
+    function showVoucher() {
+      const section = document.getElementById('voucherSection');
+      section.classList.remove('hidden');
+
+      const alreadyRedeemed = LOCALI.get(LOCALI.KEYS.VOUCHER_REDEEMED);
+
+      const voucherCode = document.getElementById('voucherCode');
+      const code = 'LOCALI-' + (storedWord.toUpperCase().slice(0,6)) + '-20';
+      voucherCode.textContent = 'Code: ' + code;
+
+      // Show elements with delay
+      setTimeout(() => {
+        const card = document.getElementById('voucherCard');
+        card.style.display = 'block';
+        card.style.animation = 'fadeUp 0.5s ease forwards';
+
+        if (alreadyRedeemed) {
+          card.classList.add('redeemed');
+          document.getElementById('redeemedMsg').classList.remove('hidden');
+          document.getElementById('finalClue').style.display = 'block';
+          document.getElementById('finalBtn').style.display = 'block';
+        } else {
+          document.getElementById('redeemInstructions').style.display = 'block';
+          document.getElementById('redeemBtn').style.display = 'block';
+          document.getElementById('finalClue').style.display = 'block';
+          document.getElementById('finalBtn').style.display = 'block';
+        }
+      }, 300);
+    }
+
+    function redeemVoucher() {
+      if (!confirm('Has the waiter confirmed your discount? Tap OK to mark as redeemed.')) return;
+      LOCALI.set(LOCALI.KEYS.VOUCHER_REDEEMED, 'true');
+
+      document.getElementById('redeemBtn').classList.add('hidden');
+      document.getElementById('redeemInstructions').style.display = 'none';
+      document.getElementById('voucherCard').classList.add('redeemed');
+      document.getElementById('redeemedMsg').classList.remove('hidden');
+    }
+
+    // Auto-fill if they come back
+    document.getElementById('wordInput').value = storedWord || '';
+
+    document.getElementById('wordInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') validateWord();
+    });
+  </script>
+</body>
+</html>

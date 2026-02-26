@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOCALI 2.0 — The Bielefeld Sync-Quest</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📍</text></svg>">
+</head>
+<body>
+  <div class="page">
+    <header class="fade-up">
+      <div class="logo">LOCΛLI<span>.</span></div>
+      <div class="phase-label">Phase 01 — The Digital Lobby</div>
+    </header>
+
+    <div class="steps fade-up-2">
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+
+    <div class="card fade-up-2">
+      <div class="card-title">Welcome to the Sync-Quest</div>
+      <p>A city-wide co-op treasure hunt through Bielefeld. You'll visit real locations, meet a stranger, and together unlock a prize worth <strong style="color:var(--gold)">€50</strong>.</p>
+    </div>
+
+    <div class="card fade-up-3">
+      <div class="card-title">The Rules</div>
+      <ul>
+        <li>You cannot win alone. Find a partner along the way.</li>
+        <li>All coordination happens via Instagram DM — no phone numbers needed.</li>
+        <li>The grand prize window is <strong style="color:var(--accent)">14:00 – 18:00</strong> on game day.</li>
+        <li>The final reward is shared — both players must be present.</li>
+        <li>Your Secret Team Word is your digital key. Guard it.</li>
+      </ul>
+    </div>
+
+    <div class="clue-box fade-up-4">
+      <p>
+        Bielefeld's most defiant silhouette watches over the city from the hill. 
+        Soldiers once marched beneath its towers — now students take selfies. 
+        Find the red marker at its gate.
+      </p>
+    </div>
+
+    <div class="fade-up-4">
+      <p style="font-size:0.7rem;color:#555;margin-bottom:0.75rem;letter-spacing:0.1em;">LOCATION 1 HINT</p>
+      <div class="alert alert-info">
+        🏰 Head to the most famous medieval fortress in Bielefeld. Look for the LOCALI sticker near the main entrance.
+      </div>
+    </div>
+
+    <a href="pages/location1.html" class="btn fade-up-5">Begin the Quest →</a>
+
+    <div class="footer fade-up-5">LOCALI 2.0 &nbsp;·&nbsp; BIELEFELD &nbsp;·&nbsp; A SYNC-QUEST EXPERIENCE</div>
+  </div>
+
+  <script src="js/locali.js"></script>
+  <script>
+    // Reset game state on lobby load (fresh start)
+    LOCALI.clear();
+  </script>
+</body>
+</html>

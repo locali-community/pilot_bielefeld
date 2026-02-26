@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOCALI — Organizer Panel</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="fade-up">
+      <div class="logo">LOCΛLI<span>.</span></div>
+      <div class="phase-label">Organizer Panel — Internal Use Only</div>
+    </header>
+
+    <div class="card fade-up-2" style="border-color:var(--accent)">
+      <div class="card-title">⚙ Event Control</div>
+      <p>This page is for the LOCALI team only. Use it on event day to monitor submissions and verify winners.</p>
+    </div>
+
+    <!-- Game Window Status -->
+    <div class="card fade-up-3">
+      <div class="card-title">Prize Window Status</div>
+      <div id="windowStatus" style="font-size:1rem;margin-bottom:0.75rem;"></div>
+      <div class="countdown">
+        <div class="countdown-digits" id="adminClock" style="font-size:2rem;color:var(--white)"></div>
+        <div class="countdown-label">Current Time</div>
+      </div>
+    </div>
+
+    <!-- Winner Log (from JSONbin, or manual) -->
+    <div class="card fade-up-4">
+      <div class="card-title">Winner Verification Checklist</div>
+      <ul>
+        <li>Ask both players to show their phones with the winner screen.</li>
+        <li>Verify both show the SAME team word and win code.</li>
+        <li>Screenshot the Instagram comment thread showing both "GREEN CARD" comments.</li>
+        <li>Check the DM showing they agreed on the team word.</li>
+        <li>Take a photo of the winners together for the pitch deck.</li>
+        <li>Mark them in your spreadsheet and apply the €50 voucher.</li>
+      </ul>
+    </div>
+
+    <!-- Emergency Reset -->
+    <div class="card fade-up-5">
+      <div class="card-title">Emergency Controls</div>
+      <p style="margin-bottom:1rem;font-size:0.72rem;">Use only if needed. These clear stored game state from the current device.</p>
+      <button class="btn btn-ghost" onclick="if(confirm('Clear all local game data?')){LOCALI.clear();alert('Cleared.');}">
+        ↺ Clear Local Game Data
+      </button>
+    </div>
+
+    <!-- JSONbin Setup Guide -->
+    <div class="card fade-up-5" style="border-color:#333">
+      <div class="card-title">Two-Device Sync Setup (Optional)</div>
+      <p style="margin-bottom:0.75rem;">To enable real two-device sync for the final phase:</p>
+      <ul>
+        <li>Sign up free at <span style="color:#3897f0">jsonbin.io</span></li>
+        <li>Create a new bin with initial content: <code style="color:var(--gold)">{}</code></li>
+        <li>Copy your Bin ID and Master API Key</li>
+        <li>Paste them into <code style="color:var(--gold)">location3.html</code> in the JSONBIN_BIN_ID and JSONBIN_API_KEY variables</li>
+        <li>Without this, the organizer manually verifies (works fine for the pilot!)</li>
+      </ul>
+    </div>
+
+    <div class="footer">LOCALI 2.0 &nbsp;·&nbsp; ORGANIZER VIEW</div>
+  </div>
+
+  <script src="../js/locali.js"></script>
+  <script>
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('adminClock').textContent = now.toLocaleTimeString('de-DE');
+
+      const open = LOCALI.isGameWindowOpen();
+      const statusEl = document.getElementById('windowStatus');
+      if (open) {
+        statusEl.innerHTML = '<span style="color:var(--green)">● OPEN</span> — Grand prize window is active (14:00–18:00)';
+      } else {
+        const secs = LOCALI.timeUntilWindow();
+        statusEl.innerHTML = '<span style="color:var(--accent)">● CLOSED</span> — Opens at 14:00';
+      }
+
+      setTimeout(updateClock, 1000);
+    }
+
+    updateClock();
+  </script>
+</body>
+</html>

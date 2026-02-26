@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOCALI — Final Sync</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="fade-up">
+      <div class="logo">LOCΛLI<span>.</span></div>
+      <div class="phase-label">Phase 04 — The Final Sync</div>
+    </header>
+
+    <div class="steps fade-up-2">
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+    </div>
+
+    <!-- WINDOW CLOSED STATE -->
+    <div id="windowClosed" class="hidden">
+      <div class="card fade-up-2" style="border-color:var(--accent)">
+        <div class="card-title">⏰ Quest Window Closed</div>
+        <p>The grand prize window runs from <strong style="color:var(--accent)">14:00 to 18:00</strong> on game day. Check back then — or join us next time!</p>
+      </div>
+      <div class="countdown fade-up-3">
+        <div class="countdown-digits" id="windowCountdown">--:--:--</div>
+        <div class="countdown-label">Until the window opens</div>
+      </div>
+    </div>
+
+    <!-- MAIN GAME (window open) -->
+    <div id="mainGame" class="hidden">
+
+      <!-- No team word gate -->
+      <div id="noWordWarning" class="alert alert-error hidden">
+        ⚠ No Secret Team Word found. 
+        <a href="location1.html" style="color:var(--accent)">→ Start from Location 1</a>
+      </div>
+
+      <!-- Step 1: Enter word -->
+      <div id="step1" class="hidden">
+        <div class="card fade-up-2">
+          <div class="card-title">📍 Final Location</div>
+          <p>Both players must enter the same Secret Team Word and scan this page within <strong style="color:var(--gold)">90 seconds</strong> of each other.</p>
+          <p style="margin-top:0.75rem;font-size:0.72rem;color:#555;">The first complete pair to submit wins the €50 prize.</p>
+        </div>
+
+        <div class="countdown fade-up-3" id="windowTimer">
+          <div class="countdown-digits pulse" id="windowTimeLeft"></div>
+          <div class="countdown-label">Remaining in the prize window</div>
+        </div>
+
+        <div class="fade-up-4">
+          <p style="font-size:0.65rem;letter-spacing:0.25em;color:#666;margin-bottom:0.6rem;">YOUR SECRET TEAM WORD</p>
+          <input type="text" id="finalWordInput" placeholder="Enter your team word…" autocomplete="off" spellcheck="false" />
+          <div id="wordError" class="alert alert-error hidden">❌ Word doesn't match. Both players must enter the exact same word.</div>
+          <button class="btn" onclick="submitSync()">🔒 Sync Now →</button>
+        </div>
+
+        <div class="alert alert-info fade-up-5" style="margin-top:1rem;">
+          📱 Both players: open this page at the same time, enter the team word, and tap "Sync Now" together within 90 seconds.
+        </div>
+      </div>
+
+      <!-- Step 2: Waiting for pair -->
+      <div id="step2" class="hidden">
+        <div class="card fade-up-2" style="border-color:var(--gold)">
+          <div class="card-title">⏳ Sync Registered!</div>
+          <p>Your submission is locked. Your partner has <strong style="color:var(--gold)" id="syncCountdown">90</strong> seconds to submit the same word.</p>
+        </div>
+
+        <div class="countdown fade-up-3">
+          <div class="countdown-digits" id="syncTimer" style="color:var(--gold)">01:30</div>
+          <div class="countdown-label">Sync window remaining</div>
+        </div>
+
+        <div class="alert alert-info fade-up-4">
+          📢 Tell your partner to scan the QR code and enter your Secret Team Word RIGHT NOW.
+        </div>
+
+        <button class="btn btn-ghost" onclick="checkForWin()" id="checkBtn">
+          ↻ Check if Partner Has Synced
+        </button>
+      </div>
+
+      <!-- WINNER STATE -->
+      <div id="winnerState" class="hidden">
+        <div class="voucher winner-glow fade-up" style="border-color:var(--gold);border-width:3px;margin-bottom:1.5rem;">
+          <div class="voucher-label" style="color:var(--gold)">🏆 SYNC COMPLETE — YOU WON</div>
+          <div class="voucher-amount" style="font-size:4rem;">€50</div>
+          <div style="font-size:0.7rem;letter-spacing:0.2em;color:#888">KAKTUS RESTAURANT VOUCHER</div>
+          <div class="voucher-merchant" id="winnerCode" style="margin-top:0.75rem;font-size:0.85rem;"></div>
+        </div>
+
+        <div class="alert alert-success fade-up-2">
+          🎉 <strong>Congratulations!</strong> You and your partner are the first to sync. Show this screen to the LOCALI team to claim your €50 voucher together.
+        </div>
+
+        <div class="card fade-up-3">
+          <div class="card-title">How to Claim</div>
+          <ul>
+            <li>Both players must be physically present.</li>
+            <li>Show this screen + your Instagram DM thread to the LOCALI team.</li>
+            <li>Your team word: <strong style="color:var(--gold)" id="claimWord"></strong></li>
+            <li>Win timestamp: <strong style="color:var(--white)" id="winTimestamp"></strong></li>
+          </ul>
+        </div>
+
+        <div class="card fade-up-4" style="border-color:#333">
+          <div class="card-title">Share your win 📸</div>
+          <p>Take a photo together and tag <span style="color:#3897f0">@locali_bielefeld</span> with <span style="color:#3897f0">#BielefeldSyncQuest</span></p>
+        </div>
+      </div>
+
+      <!-- EXPIRED STATE (sync timed out) -->
+      <div id="expiredState" class="hidden">
+        <div class="card fade-up-2" style="border-color:var(--accent)">
+          <div class="card-title">⏱ Sync Expired</div>
+          <p>The 90-second sync window closed before your partner submitted. You can try again — tap below to reset and resync.</p>
+        </div>
+        <button class="btn" onclick="resetSync()">↻ Try Again</button>
+      </div>
+
+    </div><!-- end mainGame -->
+
+    <div class="footer">LOCALI 2.0 &nbsp;·&nbsp; FINAL LOCATION &nbsp;·&nbsp; BIELEFELD</div>
+  </div>
+
+  <script src="../js/locali.js"></script>
+  <script>
+    // ── CONFIG ──
+    const GAME_START_HOUR = LOCALI.WINDOW_START_HOUR; // 14
+    const GAME_END_HOUR   = LOCALI.WINDOW_END_HOUR;   // 18
+    const SYNC_WINDOW_MS  = 90 * 1000; // 90 seconds
+
+    // localStorage keys for the "shared" double-scan mechanic
+    // We simulate both players' scans using TWO separate localStorage entries
+    // keyed by teamword + 'A' / teamword + 'B' with timestamps.
+    // In a real 2-device scenario, both players would need to be on the same browser session
+    // (e.g. shared wifi + same URL), OR we use a free service like jsonbin.io as a micro backend.
+    // For the pilot: we use localStorage + a manual "check" button. Players can also
+    // use a shared device or the operator manually verifies via Instagram proof.
+
+    const storedWord = LOCALI.get(LOCALI.KEYS.TEAM_WORD);
+
+    function init() {
+      const windowOpen = LOCALI.isGameWindowOpen();
+
+      if (!windowOpen) {
+        document.getElementById('windowClosed').classList.remove('hidden');
+        startWindowCountdown();
+        return;
+      }
+
+      document.getElementById('mainGame').classList.remove('hidden');
+
+      if (!storedWord) {
+        document.getElementById('noWordWarning').classList.remove('hidden');
+        return;
+      }
+
+      // Check for existing winner state
+      const winner = LOCALI.get(LOCALI.KEYS.WINNER);
+      if (winner) {
+        showWinner(JSON.parse(winner));
+        return;
+      }
+
+      // Check for pending sync
+      const scanTime = LOCALI.get(LOCALI.KEYS.FINAL_SCAN_TIME);
+      if (scanTime) {
+        const elapsed = Date.now() - parseInt(scanTime);
+        if (elapsed < SYNC_WINDOW_MS) {
+          showStep2(SYNC_WINDOW_MS - elapsed);
+        } else {
+          showExpired();
+        }
+        return;
+      }
+
+      showStep1();
+      startWindowTimer();
+    }
+
+    function showStep1() {
+      document.getElementById('step1').classList.remove('hidden');
+      document.getElementById('finalWordInput').value = storedWord || '';
+      startWindowTimer();
+    }
+
+    function startWindowTimer() {
+      const el = document.getElementById('windowTimeLeft');
+      if (!el) return;
+      function tick() {
+        const now = new Date();
+        const end = new Date();
+        end.setHours(GAME_END_HOUR, 0, 0, 0);
+        const diff = Math.max(0, Math.floor((end - now) / 1000));
+        el.textContent = LOCALI.formatCountdown(diff);
+        if (diff > 0) setTimeout(tick, 1000);
+        else location.reload();
+      }
+      tick();
+    }
+
+    function startWindowCountdown() {
+      const el = document.getElementById('windowCountdown');
+      function tick() {
+        const secs = LOCALI.timeUntilWindow();
+        el.textContent = LOCALI.formatCountdown(secs);
+        if (secs > 0) setTimeout(tick, 1000);
+        else location.reload();
+      }
+      tick();
+    }
+
+    function submitSync() {
+      const inputVal = document.getElementById('finalWordInput').value.trim().toLowerCase().replace(/[^a-z0-9]/gi,'');
+      const err = document.getElementById('wordError');
+
+      if (inputVal !== storedWord) {
+        err.classList.remove('hidden');
+        return;
+      }
+      err.classList.add('hidden');
+
+      // Record this scan with timestamp
+      const now = Date.now();
+      LOCALI.set(LOCALI.KEYS.FINAL_SCAN_TIME, String(now));
+
+      // Try to POST to JSONbin for partner detection (optional, graceful fail)
+      tryRemoteSync(storedWord, now);
+
+      document.getElementById('step1').classList.add('hidden');
+      showStep2(SYNC_WINDOW_MS);
+    }
+
+    function showStep2(remainingMs) {
+      document.getElementById('step2').classList.remove('hidden');
+      const timerEl = document.getElementById('syncTimer');
+      let endTime = Date.now() + remainingMs;
+
+      const interval = setInterval(() => {
+        const left = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+        const m = Math.floor(left / 60);
+        const s = left % 60;
+        timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        document.getElementById('syncCountdown').textContent = left;
+        if (left <= 0) {
+          clearInterval(interval);
+          showExpired();
+        }
+      }, 500);
+    }
+
+    async function checkForWin() {
+      const btn = document.getElementById('checkBtn');
+      btn.textContent = '↻ Checking…';
+      btn.disabled = true;
+
+      // Try remote check first
+      const remoteWin = await checkRemoteSync(storedWord);
+
+      if (remoteWin) {
+        const winData = {
+          word: storedWord,
+          time: new Date().toLocaleTimeString('de-DE'),
+          code: 'LOCALI-WIN-' + storedWord.toUpperCase().slice(0,6) + '-50'
+        };
+        LOCALI.set(LOCALI.KEYS.WINNER, JSON.stringify(winData));
+        document.getElementById('step2').classList.add('hidden');
+        showWinner(winData);
+        return;
+      }
+
+      btn.textContent = '↻ Not yet — tell your partner to scan!';
+      setTimeout(() => {
+        btn.textContent = '↻ Check if Partner Has Synced';
+        btn.disabled = false;
+      }, 2000);
+    }
+
+    function showWinner(data) {
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('step2').classList.add('hidden');
+      document.getElementById('expiredState').classList.add('hidden');
+
+      document.getElementById('winnerState').classList.remove('hidden');
+      document.getElementById('winnerCode').textContent = data.code;
+      document.getElementById('claimWord').textContent = data.word;
+      document.getElementById('winTimestamp').textContent = data.time;
+    }
+
+    function showExpired() {
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('step2').classList.add('hidden');
+      document.getElementById('expiredState').classList.remove('hidden');
+    }
+
+    function resetSync() {
+      localStorage.removeItem(LOCALI.KEYS.FINAL_SCAN_TIME);
+      location.reload();
+    }
+
+    // ── OPTIONAL: JSONbin.io micro-backend for real two-device sync ──
+    // Sign up free at jsonbin.io, create a bin, paste your bin ID + API key below.
+    // Without this, the "check" mechanic works on the SAME device (demo mode)
+    // or the organizer manually verifies.
+
+    const JSONBIN_BIN_ID  = ''; // e.g. '6651abc123def456'
+    const JSONBIN_API_KEY = ''; // e.g. '$2a$10$...'
+
+    async function tryRemoteSync(word, timestamp) {
+      if (!JSONBIN_BIN_ID || !JSONBIN_API_KEY) return;
+      try {
+        // Read current bin
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+          headers: { 'X-Master-Key': JSONBIN_API_KEY }
+        });
+        const data = await res.json();
+        const record = data.record || {};
+
+        // Add this player's scan
+        const key = word;
+        const scans = record[key] || [];
+        scans.push(timestamp);
+        record[key] = scans;
+
+        await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': JSONBIN_API_KEY
+          },
+          body: JSON.stringify(record)
+        });
+      } catch(e) { /* silent fail */ }
+    }
+
+    async function checkRemoteSync(word) {
+      // Demo mode: if no jsonbin, simulate "win" if scan is > 20s old
+      // (the operator would verify in person anyway)
+      if (!JSONBIN_BIN_ID || !JSONBIN_API_KEY) {
+        const scanTime = parseInt(LOCALI.get(LOCALI.KEYS.FINAL_SCAN_TIME) || '0');
+        const age = Date.now() - scanTime;
+        // In demo: auto-win after 20s for testing
+        // In production: remove this and rely on jsonbin or manual verification
+        return age > 20000;
+      }
+
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+          headers: { 'X-Master-Key': JSONBIN_API_KEY }
+        });
+        const data = await res.json();
+        const record = data.record || {};
+        const scans = record[word] || [];
+
+        if (scans.length < 2) return false;
+
+        // Check if two scans are within the sync window
+        scans.sort((a, b) => a - b);
+        const diff = scans[scans.length - 1] - scans[0];
+        return diff <= SYNC_WINDOW_MS;
+      } catch(e) {
+        return false;
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
